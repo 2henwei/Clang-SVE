@@ -1005,8 +1005,8 @@ Value *ScalarExprEmitter::EmitScalarConversion(Value *Src, QualType SrcType,
            "Splatted expr doesn't match with vector element type?");
 
     // Splat the element across to all elements
-    unsigned NumElements = DstTy->getVectorNumElements();
-    return Builder.CreateVectorSplat(NumElements, Src, "splat");
+    auto EltCnt = cast<llvm::VectorType>(DstTy)->getElementCount();
+    return Builder.CreateVectorSplat(EltCnt, Src, "splat");
   }
 
   // Allow bitcast from vector to integer/fp of the same size.
@@ -1335,7 +1335,9 @@ Value *ScalarExprEmitter::VisitArraySubscriptExpr(ArraySubscriptExpr *E) {
 
 static llvm::Constant *getMaskElt(llvm::ShuffleVectorInst *SVI, unsigned Idx,
                                   unsigned Off, llvm::Type *I32Ty) {
-  int MV = SVI->getMaskValue(Idx);
+  int MV;
+  if (!SVI->getMaskValue(Idx, MV))
+    llvm_unreachable("ShuffleVector has non-constant mask");
   if (MV == -1)
     return llvm::UndefValue::get(I32Ty);
   return llvm::ConstantInt::get(I32Ty, Off+MV);
@@ -1728,8 +1730,8 @@ Value *ScalarExprEmitter::VisitCastExpr(CastExpr *CE) {
     llvm::Type *DstTy = ConvertType(DestTy);
     Value *Elt = Visit(const_cast<Expr*>(E));
     // Splat the element across to all elements
-    unsigned NumElements = DstTy->getVectorNumElements();
-    return Builder.CreateVectorSplat(NumElements, Elt, "splat");
+    auto EltCnt = cast<llvm::VectorType>(DstTy)->getElementCount();
+    return Builder.CreateVectorSplat(EltCnt, Elt, "splat");
   }
 
   case CK_IntegralCast:

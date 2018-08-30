@@ -1406,6 +1406,17 @@ void Clang::AddAArch64TargetArgs(const ArgList &Args,
     else
       CmdArgs.push_back("-aarch64-enable-global-merge=true");
   }
+
+  // For SVE we want to enable scalable vectorization with predication.
+  if (any_of(CmdArgs,
+             [](const char *Arg) { return strcmp(Arg, "+sve") == 0; })) {
+    CmdArgs.push_back("-mllvm");
+    CmdArgs.push_back("-use-sve-vectorizer");
+    CmdArgs.push_back("-mllvm");
+    CmdArgs.push_back("-force-scalable-vectorization");
+    CmdArgs.push_back("-mllvm");
+    CmdArgs.push_back("-force-vector-predication");
+  }
 }
 
 void Clang::AddMIPSTargetArgs(const ArgList &Args,
