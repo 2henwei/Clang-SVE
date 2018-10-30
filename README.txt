@@ -1,26 +1,45 @@
-//===----------------------------------------------------------------------===//
-// C Language Family Front-end
-//===----------------------------------------------------------------------===//
 
-Welcome to Clang.  This is a compiler front-end for the C family of languages
-(C, C++, Objective-C, and Objective-C++) which is built as part of the LLVM
-compiler infrastructure project.
+SVE Enhancements to LLVM
+========================
 
-Unlike many other compiler frontends, Clang is useful for a number of things
-beyond just compiling code: we intend for Clang to be host to a number of
-different source-level tools.  One example of this is the Clang Static Analyzer.
+This repository is a clone of the public Clang repository (http://llvm.org), plus
+a single patch which provides support for the ARMv8-A Scalable Vector Extension
+(SVE).
 
-If you're interested in more (including how to build Clang) it is best to read
-the relevant web sites.  Here are some pointers:
+ARM is providing this repository to:
+* Aid discussions about IR changes to support vectorizing loops in a scalable
+  manner
+* Allow partners to progress with implementation
 
-Information on Clang:              http://clang.llvm.org/
-Building and using Clang:          http://clang.llvm.org/get_started.html
-Clang Static Analyzer:             http://clang-analyzer.llvm.org/
-Information on the LLVM project:   http://llvm.org/
+This patch is not intended for inclusion directly into upstream LLVM. There is
+a separate upstreaming effort, documented in this RFC:
+http://lists.llvm.org/pipermail/llvm-dev/2018-July/124396.html
 
-If you have questions or comments about Clang, a great place to discuss them is
-on the Clang development mailing list:
-  http://lists.llvm.org/mailman/listinfo/cfe-dev
+ARM provides no assurances regarding maintenance or support for this repository.
+Pull requests will not be accepted.  ARM intends to remove it once upstream
+LLVM has sufficiently advanced support for SVE.
 
-If you find a bug in Clang, please file it in the LLVM bug tracker:
-  http://llvm.org/bugs/
+This patch includes (but is not limited to):
+* Minimal support for SVE -- flags plus IR interfaces
+
+
+Contributors:
+Alban Bridonneau
+Amara Emerson
+Andra-Maria Ilies
+Assad Hashmi
+Cullen Rhodes
+David Sherwood
+Florian Hahn
+Francesco Petrogalli
+Graham Hunter
+Joshua Warburton
+Kerry McLaughlin
+Kiran Chandramohan
+Maciej Gabka
+Paul Walker
+Prakhar Bahuguna
+Richard Sandiford
+Sander De Smalen
+Will Lovett
+
